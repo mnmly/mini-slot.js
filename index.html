@@ -3,53 +3,110 @@
   <head>
     <title>mini slot example</title>
     <style type="text/css">
-      body{
-        font-family: monospace;
-        font-size: 1.6rem;
-        text-align: center;
-        padding-top: 50px;
-      }
       h1{
         font-family: Helvetica, sans-serif;
         font-size: 1.2rem;
       }
       #example{
+        font-family: monospace;
+        font-size: 1.2rem;
+        text-align: center;
+        padding-top: 50px;
+      }
+      #example .date{
         word-spacing: -13px;
       }
+      .markdown-body{
+        width: 600px;
+        margin: 0 auto;
+        margin-top: 50px;
+        padding-top: 50px;
+        border-top: 1px solid hsl(0, 0%, 80%);
+        margin-bottom: 50px;
+      }
+      #toggle-button{
+        margin-top: 20px;
+        border: 1px solid #ddd;
+        border-radius: 3px;
+        background-color: white;
+      }
     </style>
+    <link rel="stylesheet" href="assets/stylesheets/style.css" type="text/css" media="screen" charset="utf-8">
   </head>
 
   <body>
-    <h1>Mini Example</h1>
     <div id="example">
-      <span id="target-01" data-target="02"></span>.
-      <span id="target-02" data-target="30"></span>.
-      <span id="target-03" data-target="2020"></span>
+      <h1>MiniSlot Example</h1>
+      <div class="date">
+        <span id="target-01" data-target="12"></span>.
+        <span id="target-02" data-target="31"></span>.
+        <span id="target-03" data-target="2021"></span>
+      </div>
+      <div>
+        <button id="toggle-button">SET</button>
+      </div>
+
     </div>
-
-    <script type="text/javascript" src="http://coffeescript.org/extras/coffee-script.js"></script>
+      <div class="markdown-body"></div>
+    
+    
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script type="text/javascript" src="assets/javascripts/libs/coffee-script.js"></script>
+    <script type="text/javascript" src="assets/javascripts/libs/underscore-min.js"></script>
+    <script type="text/javascript" src="assets/javascripts/libs/showdown.js"></script>
     <script type="text/coffeescript" src="libs/mini-slot.coffee"></script>
-    <script type="text/javascript" src="assets/javascripts/libs/require.js"></script>
 
-    <script type="text/coffeescript">
-      miniSlotEls = document.querySelectorAll('[data-target]')
-      miniSlots   = []
+    <script type="text/coffeescript" id="example-source">
 
-      # Make miniSlots
-      for miniSlotEl in miniSlotEls
-        miniSlot = new window.MiniSlot miniSlotEl
-        miniSlot.appendSequence()
-        miniSlots.push miniSlot
-      
-      window.setTargetValues = =>
-        for miniSlot in miniSlots
-          miniSlot.setTargetValue()
-      
-      window.unsetTargetValues = =>
-        for miniSlot in miniSlots
-          miniSlot.unsetTargetValue()
+      class Example
+        constructor: ->
+          @miniSlotEls = document.querySelectorAll('[data-target]')
+          @miniSlots   = []
+          @button      = document.getElementById('toggle-button')
+          @isSet       = no
+          
+          @makeMiniSlots()
+          @prepareREADME()
 
+          @button.addEventListener "click", =>
+            if @isSet then @unsetTargetValues() else @setTargetValues()
+            @button.innerText = if @isSet then "SET" else "UNSET"
+            @isSet = not @isSet
+          , no
+
+        makeMiniSlots: ->
+          # Make miniSlots
+          for miniSlotEl in @miniSlotEls
+            miniSlot = new window.MiniSlot miniSlotEl
+            miniSlot.appendSequence()
+            @miniSlots.push miniSlot
+ 
+
+        setTargetValues: ->
+          for miniSlot in @miniSlots
+            miniSlot.setTargetValue()
+          return
+
+
+        unsetTargetValues: ->
+          for miniSlot in @miniSlots
+            miniSlot.unsetTargetValue()
+          return
+
+
+        prepareREADME: ->
+          $.get "README.md", (data)->
+            data = data.replace(/```(\w+)?/gi, '\n')
+            data += "### Example Source\n"
+            data += $("#example-source").get(0).innerHTML
+            c = new Showdown.converter
+            $(".markdown-body").append c.makeHtml(data)
+        
+      # onLoad
+      $ ->
+        window.example = example = new Example
+
+    
     </script>
   </body>
 </html>
-

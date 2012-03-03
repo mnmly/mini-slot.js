@@ -1,23 +1,27 @@
 ### Usage
+
 Only works with `monospace` typeface currently.
 
-```css
-  [data-target]{
-    font-family: monospace;
-  }
-```
+Basic HTML.
 
 ```html
-  <span id="target-01" data-target="20"></span>.
+
+    <span id="target-01" data-target="20"></span>.
 ```
+
+Create `MiniSlot` instance.
 
 ```coffeescript
 
-  counter = new Counter(document.getElementById('#target-01'))
+    miniSlot = new MiniSlot(document.getElementById('#target-01'))
 
-  # Set target value
-  counter.setTargetValue()
-  
-  # Unset target value
-  counter.unsetTargetValue()
+    # Set target value
+    miniSlot.setTargetValue()
+
+    # Unset target value
+    miniSlot.unsetTargetValue()
 ```
+
+### Slightly Annotated Source
+[Here](docs/mini-slot.html).
+

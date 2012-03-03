@@ -7,7 +7,7 @@ class MiniSlot
     dataVar  : "shift"
     easing   : "cubic-bezier(0.860, 0.000, 0.070, 1.000)"
 
-  constructor: (@el, @duration = 500)->
+  constructor: (@el, @duration = 500, opts = {})->
     # Store `document` as it might be running on test
     @doc          = @el.ownerDocument
     @fontSize     = window?.getComputedStyle(@el, '').getPropertyValue("font-size") or '16px'
@@ -56,9 +56,10 @@ class MiniSlot
   # It will offset the sequence to display targeted value.
   # and it will be fired for each digit  with `delay` interval
   
-  setTargetValue: (delay = 100)->
+  setTargetValue: (delay = 300)->
     sequences = @el.querySelectorAll('.digit-sequence')
-    for sequence, i in sequences.reverse()
+    length    = sequences.length
+    for sequence, i in sequences
       
       ((sequence, delay)->
         setTimeout ->
@@ -66,7 +67,7 @@ class MiniSlot
           sequence.style.webkitTransform = "translate3d(0, -#{shiftVal}%, 0)"
           sequence.style.mozTransform = "translate(0, -#{shiftVal}%)"
         , delay
-      )(sequence, i * delay)
+      )(sequence, ( length - 1 - i ) * delay)
     return
 
 
