@@ -23,5 +23,5 @@ Create `MiniSlot` instance.
 ```
 
 ### Slightly Annotated Source
-[Here](docs/mini-slot.html).
+[Here](http://mnmly.github.com/mini-slot.js/docs/mini-slot.html).
 
