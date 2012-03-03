@@ -1,0 +1,55 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <title>mini slot example</title>
+    <style type="text/css">
+      body{
+        font-family: monospace;
+        font-size: 1.6rem;
+        text-align: center;
+        padding-top: 50px;
+      }
+      h1{
+        font-family: Helvetica, sans-serif;
+        font-size: 1.2rem;
+      }
+      #example{
+        word-spacing: -13px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <h1>Mini Example</h1>
+    <div id="example">
+      <span id="target-01" data-target="02"></span>.
+      <span id="target-02" data-target="30"></span>.
+      <span id="target-03" data-target="2020"></span>
+    </div>
+
+    <script type="text/javascript" src="http://coffeescript.org/extras/coffee-script.js"></script>
+    <script type="text/coffeescript" src="libs/mini-slot.coffee"></script>
+    <script type="text/javascript" src="assets/javascripts/libs/require.js"></script>
+
+    <script type="text/coffeescript">
+      miniSlotEls = document.querySelectorAll('[data-target]')
+      miniSlots   = []
+
+      # Make miniSlots
+      for miniSlotEl in miniSlotEls
+        miniSlot = new window.MiniSlot miniSlotEl
+        miniSlot.appendSequence()
+        miniSlots.push miniSlot
+      
+      window.setTargetValues = =>
+        for miniSlot in miniSlots
+          miniSlot.setTargetValue()
+      
+      window.unsetTargetValues = =>
+        for miniSlot in miniSlots
+          miniSlot.unsetTargetValue()
+
+    </script>
+  </body>
+</html>
+
